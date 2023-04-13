@@ -17,7 +17,9 @@ class MainActivityViewModel @Inject  constructor(val repository: Repository): Vi
 
     @Inject
     lateinit var retrofit: Retrofit
-    var liveDataFirstName: MutableLiveData<String> = MutableLiveData()
+
+    @Inject
+    lateinit var liveDataFirstName: MutableLiveData<String>
 
     fun getUserData(id: Int) {
 
@@ -33,7 +35,7 @@ class MainActivityViewModel @Inject  constructor(val repository: Repository): Vi
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                liveDataFirstName.value = t.message.toString()
+                liveDataFirstName.value = t.message
             }
         })
     }
