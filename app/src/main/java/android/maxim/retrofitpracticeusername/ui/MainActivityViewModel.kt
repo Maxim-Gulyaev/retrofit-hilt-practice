@@ -1,10 +1,9 @@
 package android.maxim.retrofitpracticeusername.ui
 
-import android.maxim.retrofitpracticeusername.R
 import android.maxim.retrofitpracticeusername.model.APIService
 import android.maxim.retrofitpracticeusername.model.Repository
 import android.maxim.retrofitpracticeusername.model.UserResponse
-import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -18,8 +17,7 @@ class MainActivityViewModel @Inject  constructor(val repository: Repository): Vi
 
     @Inject
     lateinit var retrofit: Retrofit
-    var outputFirstName: String? = null
-
+    var liveDataFirstName: MutableLiveData<String> = MutableLiveData()
 
     fun getUserData(id: Int) {
 
@@ -30,13 +28,17 @@ class MainActivityViewModel @Inject  constructor(val repository: Repository): Vi
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 if (response.code() == 200) {
                     val userResponse = response.body()!!
-                    outputFirstName = userResponse.firstName!!
+                    liveDataFirstName.value = userResponse.firstName!!
                 }
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                outputFirstName = t.message.toString()
+                liveDataFirstName.value = t.message.toString()
             }
         })
+    }
+
+    fun getFirstName(): MutableLiveData<String> {
+        return liveDataFirstName
     }
 }
